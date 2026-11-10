@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pontos de Coleta em Porto Velho - EcoLixo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22><text y=%2222%22 font-size=%2222%22>🌿</text></svg>">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-icon">🌿</span>
+                <span>EcoLixo <small style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Porto Velho</small></span>
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">☰</button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Início</a>
+                <a href="pontos.html" class="nav-link active">Pontos de Coleta</a>
+                <a href="admin.html" class="nav-link" id="nav-admin-link" style="display: none;">Painel Admin</a>
+                <div class="nav-auth" id="nav-auth-container">
+                    <a href="login.html" class="btn btn-secondary btn-sm">Entrar</a>
+                    <a href="cadastro.html" class="btn btn-primary btn-sm">Cadastre-se</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ÁREA DE PESQUISA (UC03 / RF03) -->
+    <main class="main-content">
+        <section style="background: #ffffff; border-bottom: 1px solid var(--border); padding: 2.5rem 1.25rem;">
+            <div class="container" style="padding: 0;">
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <span class="user-role-tag" style="background: var(--primary); margin-bottom: 0.5rem; display: inline-block;">Porto Velho - RO (UC03)</span>
+                    <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Postos de Coleta em Porto Velho</h1>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        Consulte os locais reais de descarte na capital rondoniense e filtre pelos tipos de materiais aceitos.
+                    </p>
+
+                    <!-- FILTROS DE BUSCA -->
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.25rem;">
+                        <div style="flex: 2; min-width: 250px;">
+                            <input type="text" id="search-input" class="form-control" placeholder="🔍 Digite o bairro ou nome (ex: Shopping, Centro, Industrial, Calama...)" autocomplete="off">
+                        </div>
+                        <div style="flex: 1; min-width: 180px;">
+                            <select id="city-select" class="form-control">
+                                <option value="">Todos os Bairros de Porto Velho</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- CHIPS DE FILTRO POR MATERIAL -->
+                    <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-secondary btn-sm filter-chip active" data-material="todos">Todos os Materiais</button>
+                        <button type="button" class="btn btn-secondary btn-sm filter-chip" data-material="celular">📱 Celulares</button>
+                        <button type="button" class="btn btn-secondary btn-sm filter-chip" data-material="computador">💻 Computadores</button>
+                        <button type="button" class="btn btn-secondary btn-sm filter-chip" data-material="bateria">🔋 Pilhas & Baterias</button>
+                        <button type="button" class="btn btn-secondary btn-sm filter-chip" data-material="eletrodoméstico">🔌 Eletrodomésticos</button>
+                        <button type="button" class="btn btn-secondary btn-sm filter-chip" data-material="cabo">🧵 Cabos & Placas</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTADOS (CA03 / RF03 & CA04 / RF04) -->
+        <div class="container" style="padding-top: 2rem; padding-bottom: 3rem;">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Pontos Oficiais Cadastrados</h2>
+                    <span id="search-timing" style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">
+                        Tempo de resposta: ... (RNF05: &lt; 3s)
+                    </span>
+                </div>
+                <div id="results-count" style="font-weight: 600; color: var(--text-secondary);">
+                    Consultando pontos em Porto Velho...
+                </div>
+            </div>
+
+            <!-- GRID DE PONTOS -->
+            <div class="points-grid" id="points-grid">
+                <!-- Preenchido via pontos.js -->
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DE DETALHES DO PONTO (UC04 / RF04) -->
+    <div class="modal-overlay" id="modal-details" role="dialog" aria-modal="true">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-point-title">Detalhes do Ponto de Coleta</h3>
+                <button type="button" class="modal-close" data-close-modal aria-label="Fechar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <span class="city-badge" id="modal-point-city">Porto Velho - RO</span>
+                    <span style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">✓ Posto Real em Porto Velho</span>
+                </div>
+
+                <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem;">Endereço Completo:</h4>
+                <p id="modal-point-address" style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 1.25rem; background: var(--bg-muted); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    Endereço
+                </p>
+
+                <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Materiais Aceitos para Descarte (RF04):</h4>
+                <ul id="modal-point-materials" style="list-style: none; margin-bottom: 1.25rem;">
+                    <!-- Materiais preenchidos dinamicamente -->
+                </ul>
+
+                <div class="alert alert-info" style="margin-bottom: 0;">
+                    <span>💡</span>
+                    <span style="font-size: 0.85rem;">Horário: Confira os horários de funcionamento específicos de cada órgão (Prefeitura, Shopping ou Cooperativa). O descarte é gratuito para a população.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="modal-maps-link" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                    🗺️ Ver no Google Maps
+                </a>
+                <button type="button" class="btn btn-primary btn-sm" data-close-modal>
+                    Fechar Detalhes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <span>🌿</span>
+                    <span>EcoLixo Porto Velho</span>
+                </div>
+                <p class="footer-desc">
+                    Plataforma para localização e divulgação de pontos de descarte consciente de lixo eletrônico em Porto Velho - RO.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Navegação</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="pontos.html">Pontos de Coleta</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="cadastro.html">Criar Conta</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Critérios de Aceite</h4>
+                <ul class="footer-links">
+                    <li><span style="font-size: 0.85rem;">CA03 / RF03 — Busca em Porto Velho</span></li>
+                    <li><span style="font-size: 0.85rem;">CA04 / RF04 — Detalhes e Materiais</span></li>
+                    <li><span style="font-size: 0.85rem;">RNF05 — Resposta em &lt; 3 segundos</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>&copy; 2026 EcoLixo Porto Velho • Versão 1.0</div>
+            <div>PostgreSQL • Express • Node.js</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/pontos.js"></script>
+</body>
+</html>

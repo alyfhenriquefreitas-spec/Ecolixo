@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Administrador - EcoLixo Porto Velho</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22><text y=%2222%22 font-size=%2222%22>🌿</text></svg>">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-icon">🌿</span>
+                <span>EcoLixo Porto Velho <small style="font-size: 0.7rem; background: #0284c7; color: white; padding: 0.15rem 0.5rem; border-radius: 99px; margin-left: 0.3rem;">ADMIN</small></span>
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">☰</button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Início</a>
+                <a href="pontos.html" class="nav-link">Consultar Pontos</a>
+                <a href="admin.html" class="nav-link active">Painel Admin</a>
+                <div class="nav-auth" id="nav-auth-container">
+                    <!-- Preenchido via auth.js -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO DO PAINEL ADMIN -->
+    <main class="main-content">
+        <div class="container" style="padding-top: 2rem; padding-bottom: 3rem;">
+            
+            <!-- CABEÇALHO DO PAINEL -->
+            <div class="admin-header-card">
+                <div>
+                    <h1 style="font-size: 1.8rem; margin-bottom: 0.35rem;">Gestão de Pontos de Coleta - Porto Velho</h1>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Controle central de postos de descarte em Porto Velho - RO. Apenas administradores autenticados podem cadastrar e alterar pontos (RNF03).
+                    </p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" id="btn-new-point">
+                        ➕ Cadastrar Novo Ponto em Porto Velho (UC05)
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARDS DE ESTATÍSTICAS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📍</div>
+                    <div>
+                        <div class="stat-value" id="stat-total-points">0</div>
+                        <div class="stat-label">Pontos em Porto Velho (RF05)</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--info-light); color: var(--info);">🏙️</div>
+                    <div>
+                        <div class="stat-value" id="stat-total-cities">Porto Velho</div>
+                        <div class="stat-label">Município Atendido (RF03)</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--warning-light); color: var(--warning);">♻️</div>
+                    <div>
+                        <div class="stat-value" id="stat-total-materials">0</div>
+                        <div class="stat-label">Tipos de Materiais (RF04)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELA DE PONTOS -->
+            <div class="section-header" style="margin-bottom: 1rem;">
+                <h2 style="font-size: 1.3rem;">Lista de Pontos Cadastrados em Porto Velho</h2>
+                <div style="width: 280px;">
+                    <input type="text" id="admin-search-input" class="form-control" placeholder="🔍 Filtrar por nome ou bairro...">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">ID</th>
+                            <th>Nome do Ponto</th>
+                            <th>Cidade / UF</th>
+                            <th>Endereço</th>
+                            <th>Materiais Aceitos</th>
+                            <th style="width: 170px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-points-tbody">
+                        <!-- Linhas geradas via admin.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DE CADASTRO (UC05) E EDIÇÃO (UC06) -->
+    <div class="modal-overlay" id="modal-point-form" role="dialog" aria-modal="true">
+        <div class="modal-container" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-form-title">Cadastrar Novo Ponto em Porto Velho (UC05)</h3>
+                <button type="button" class="modal-close" data-close-modal aria-label="Fechar">&times;</button>
+            </div>
+
+            <form id="point-form">
+                <div class="modal-body">
+                    <input type="hidden" id="point-id">
+
+                    <div id="form-error-alert" class="alert alert-danger" style="display: none;"></div>
+
+                    <div class="form-group">
+                        <label for="point-nome" class="form-label">Nome do Ponto de Coleta *</label>
+                        <input type="text" id="point-nome" class="form-control" placeholder="Ex: Ecoponto Municipal Zona Leste" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="point-cidade" class="form-label">Cidade / Estado *</label>
+                        <input type="text" id="point-cidade" class="form-control" value="Porto Velho" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="point-endereco" class="form-label">Endereço Completo com Bairro em Porto Velho *</label>
+                        <input type="text" id="point-endereco" class="form-control" placeholder="Ex: Av. Mamoré, 2100 - Bairro JK, Porto Velho - RO" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Materiais Aceitos para Descarte (UC05 / UC06) *</label>
+                        <small class="form-text" style="display: block; margin-bottom: 0.5rem;">
+                            Selecione os materiais que este ponto está capacitado a receber:
+                        </small>
+
+                        <div class="materials-selector">
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Celulares e Carregadores">
+                                <span>📱 Celulares e Carregadores</span>
+                            </label>
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Computadores e Laptops">
+                                <span>💻 Computadores e Laptops</span>
+                            </label>
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Pilhas e Baterias Portáteis">
+                                <span>🔋 Pilhas e Baterias</span>
+                            </label>
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Monitores e TVs antigas">
+                                <span>🖥️ Monitores e TVs</span>
+                            </label>
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Impressoras e Periféricos">
+                                <span>🖨️ Impressoras</span>
+                            </label>
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Cabos, Fios e Carregadores">
+                                <span>🔌 Cabos e Fios</span>
+                            </label>
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Placas Eletrônicas e Componentes">
+                                <span>🧩 Placas Eletrônicas</span>
+                            </label>
+                            <label class="material-checkbox">
+                                <input type="checkbox" name="materiais" value="Pequenos Eletrodomésticos">
+                                <span>☕ Eletroportáteis</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="point-materiais-extras" class="form-label">Outros Materiais (Opcional)</label>
+                        <input type="text" id="point-materiais-extras" class="form-control" placeholder="Separe por vírgula (ex: Nobreaks, Baterias Automotivas, Som)">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-close-modal>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-point">
+                        💾 Gravar no Banco de Dados
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <span>🌿</span>
+                    <span>EcoLixo Porto Velho Admin</span>
+                </div>
+                <p class="footer-desc">
+                    Módulo administrativo restrito para gestão de postos de coleta em Porto Velho - Rondônia.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Painel</h4>
+                <ul class="footer-links">
+                    <li><a href="admin.html">Listar Pontos de Porto Velho</a></li>
+                    <li><a href="pontos.html">Visualização Pública</a></li>
+                    <li><a href="index.html">Ir para o Início</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Critérios de Aceite</h4>
+                <ul class="footer-links">
+                    <li><span style="font-size: 0.85rem;">CA05 / RF05 — Gravar Ponto no Banco</span></li>
+                    <li><span style="font-size: 0.85rem;">CA06 / RF06 — Atualizar Ponto Existente</span></li>
+                    <li><span style="font-size: 0.85rem;">RNF03 — Proteção por Perfil Admin</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>&copy; 2026 EcoLixo Porto Velho • Módulo Administrativo</div>
+            <div>PostgreSQL • Express • Node.js</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

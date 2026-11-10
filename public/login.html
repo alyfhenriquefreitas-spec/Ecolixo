@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - EcoLixo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22><text y=%2222%22 font-size=%2222%22>🌿</text></svg>">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-icon">🌿</span>
+                <span>EcoLixo</span>
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">☰</button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Início</a>
+                <a href="pontos.html" class="nav-link">Pontos de Coleta</a>
+                <div class="nav-auth" id="nav-auth-container">
+                    <a href="login.html" class="btn btn-secondary btn-sm active">Entrar</a>
+                    <a href="cadastro.html" class="btn btn-primary btn-sm">Cadastre-se</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ÁREA DE AUTENTICAÇÃO (UC02 / RF02) -->
+    <main class="main-content auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">🔑</div>
+                <h1 class="auth-title">Acessar o EcoLixo</h1>
+                <p class="auth-subtitle">Informe seu e-mail e senha para entrar no sistema (UC02)</p>
+            </div>
+
+            <!-- BOTÕES RÁPIDOS PARA AVALIAÇÃO / TESTES ESCOLARES -->
+            <div class="demo-accounts">
+                <div class="demo-title">
+                    <span>⚡</span>
+                    <span>Preenchimento Rápido para Testes:</span>
+                </div>
+                <div class="demo-buttons">
+                    <button type="button" class="demo-btn" id="btn-demo-admin" title="Preenche as credenciais do Administrador">
+                        👑 Administrador
+                    </button>
+                    <button type="button" class="demo-btn" id="btn-demo-user" title="Preenche as credenciais do Usuário Padrão">
+                        👤 Usuário Comum
+                    </button>
+                </div>
+            </div>
+
+            <!-- ALERTA DE ERRO -->
+            <div id="login-error-alert" class="alert alert-danger" style="display: none;"></div>
+
+            <!-- FORMULÁRIO DE LOGIN -->
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email" class="form-label">E-mail</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="seuemail@exemplo.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="login-senha" class="form-label">Senha</label>
+                    <div class="input-password-group">
+                        <input type="password" id="login-senha" class="form-control" placeholder="Digite sua senha" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" id="btn-toggle-password" title="Mostrar/ocultar senha">👁️</button>
+                    </div>
+                </div>
+
+                <div class="auth-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="lembrar-me" checked>
+                        <span>Lembrar de mim</span>
+                    </label>
+                    <a href="#" style="font-size: 0.85rem;" onclick="alert('Como este é um projeto escolar simplificado, utilize os botões de preenchimento rápido de teste acima!'); return false;">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" id="btn-submit-login" class="btn btn-primary btn-block btn-lg">
+                    Entrar no Sistema
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Não possui conta? <a href="cadastro.html" style="font-weight: 600;">Crie uma conta gratuita (UC01)</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- SCRIPTS -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('login-form');
+            const emailInput = document.getElementById('login-email');
+            const senhaInput = document.getElementById('login-senha');
+            const togglePasswordBtn = document.getElementById('btn-toggle-password');
+            const errorAlert = document.getElementById('login-error-alert');
+            const submitBtn = document.getElementById('btn-submit-login');
+
+            // Toggle visualização de senha
+            if (togglePasswordBtn) {
+                togglePasswordBtn.addEventListener('click', () => {
+                    const isPassword = senhaInput.type === 'password';
+                    senhaInput.type = isPassword ? 'text' : 'password';
+                    togglePasswordBtn.textContent = isPassword ? '🙈' : '👁️';
+                });
+            }
+
+            // Preenchimento de contas de demonstração (Facilidade na avaliação do professor)
+            document.getElementById('btn-demo-admin')?.addEventListener('click', () => {
+                emailInput.value = 'admin@ecolixo.com';
+                senhaInput.value = 'admin123';
+                errorAlert.style.display = 'none';
+            });
+
+            document.getElementById('btn-demo-user')?.addEventListener('click', () => {
+                emailInput.value = 'usuario@ecolixo.com';
+                senhaInput.value = 'usuario123';
+                errorAlert.style.display = 'none';
+            });
+
+            // Submissão do formulário
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                errorAlert.style.display = 'none';
+
+                const email = emailInput.value.trim();
+                const senha = senhaInput.value;
+
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<div class="loading-spinner"></div> Autenticando...';
+
+                try {
+                    const res = await window.api.login({ email, senha });
+
+                    // Salva sessão no auth
+                    window.auth.setUser(res.usuario, res.token);
+                    window.api.showToast(`Login realizado com sucesso!`, 'success');
+
+                    // Redireciona para o destino desejado ou Painel se for Admin
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect');
+
+                    setTimeout(() => {
+                        if (redirect) {
+                            window.location.href = redirect;
+                        } else if (res.usuario.perfil === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'pontos.html';
+                        }
+                    }, 500);
+
+                } catch (err) {
+                    errorAlert.textContent = err.message || 'Erro ao realizar login.';
+                    errorAlert.style.display = 'block';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

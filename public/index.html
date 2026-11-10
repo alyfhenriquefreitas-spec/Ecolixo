@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLixo Porto Velho - Descarte Consciente de Lixo Eletrônico</title>
+    <meta name="description" content="Encontre pontos reais de coleta de lixo eletrônico em Porto Velho - RO. Conectando os cidadãos de Porto Velho à reciclagem sustentável.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22><text y=%2222%22 font-size=%2222%22>🌿</text></svg>">
+</head>
+<body>
+
+    <!-- NAVBAR PRINCIPAL -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-icon">🌿</span>
+                <span>EcoLixo <small style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Porto Velho</small></span>
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">☰</button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link active">Início</a>
+                <a href="pontos.html" class="nav-link">Pontos de Coleta</a>
+                <a href="admin.html" class="nav-link" id="nav-admin-link" style="display: none;">Painel Admin</a>
+                <a href="#como-funciona" class="nav-link">Como Funciona</a>
+                <div class="nav-auth" id="nav-auth-container">
+                    <a href="login.html" class="btn btn-secondary btn-sm">Entrar</a>
+                    <a href="cadastro.html" class="btn btn-primary btn-sm">Cadastre-se</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-pill">
+                    <span>📍</span>
+                    <span>Porto Velho - Rondônia • Projeto Escolar</span>
+                </div>
+                <h1>Descarte Consciente de Lixo Eletrônico em Porto Velho</h1>
+                <p>
+                    Encontre os locais oficiais de descarte na capital rondoniense (Prefeitura, CATANORTE, Porto Velho Shopping, SEMA, SEDAM, IFRO e postos de coleta).
+                </p>
+                <div class="hero-actions">
+                    <a href="pontos.html" class="btn btn-primary btn-lg" style="background: #ffffff; color: var(--primary-dark);">
+                        🔍 Consultar Pontos em Porto Velho
+                    </a>
+                    <a href="cadastro.html" class="btn btn-outline btn-lg" style="border-color: #ffffff; color: #ffffff;">
+                        👤 Criar Conta Gratuita
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAIXA DE BUSCA RÁPIDA POR BAIRRO / LOCAL (UC03 / RF03) -->
+        <div class="container">
+            <div class="search-box-card">
+                <form id="home-search-form" class="search-form">
+                    <div class="search-input-wrapper">
+                        <span class="search-icon">📍</span>
+                        <input type="text" id="home-search-input" class="search-input" placeholder="Pesquise por bairro ou ponto em Porto Velho (ex: Shopping, Centro, Industrial, Calama...)" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Pesquisar Pontos (UC03)
+                    </button>
+                </form>
+
+                <div class="city-tags" id="city-tags">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTAGEM DE PONTOS DE COLETA -->
+        <section class="container" style="padding-top: 3rem;">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Pontos de Coleta Oficiais em Porto Velho</h2>
+                    <p class="section-subtitle">Consulte o endereço completo e os materiais aceitos em cada posto da cidade.</p>
+                </div>
+                <div id="results-count" style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">
+                    Carregando pontos de Porto Velho...
+                </div>
+            </div>
+
+            <!-- Grid de Cards de Pontos -->
+            <div class="points-grid" id="home-points-grid">
+                <!-- Renderizado via main.js -->
+            </div>
+
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a href="pontos.html" class="btn btn-secondary">
+                    Ver todos os pontos com filtros por tipo de material →
+                </a>
+            </div>
+        </section>
+
+        <!-- SEÇÃO COMO FUNCIONA -->
+        <section id="como-funciona" class="info-section" style="background: #ffffff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-top: 4rem;">
+            <div class="container">
+                <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+                    <span class="user-role-tag" style="background: var(--accent); margin-bottom: 0.5rem; display: inline-block;">Passo a Passo</span>
+                    <h2 style="font-size: 2rem; margin-bottom: 0.75rem;">Como Funciona o EcoLixo em Porto Velho</h2>
+                    <p style="color: var(--text-secondary);">Três passos fáceis para destinar seus eletrônicos com responsabilidade na nossa cidade.</p>
+                </div>
+
+                <div class="info-cards-grid">
+                    <div class="info-card">
+                        <div class="info-card-icon">1</div>
+                        <h3>Escolha a Região</h3>
+                        <p>Localize o ponto mais conveniente em Porto Velho: Zona Norte, Zona Sul, Centro, Shopping ou cooperativas.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-card-icon">2</div>
+                        <h3>Consulte os Materiais</h3>
+                        <p>Cada local aceita itens específicos (computadores, pilhas, TVs, celulares, eletroportáteis). Veja os detalhes antes de ir.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-card-icon">3</div>
+                        <h3>Faça o Descarte Gratuito</h3>
+                        <p>Entregue seus itens nos horários indicados e contribua para que os catadores da Catanorte e a reciclagem façam o tratamento correto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO EDUCAÇÃO AMBIENTAL -->
+        <section class="container" style="padding-top: 4rem; padding-bottom: 4rem;">
+            <div style="text-align: center; max-width: 750px; margin: 0 auto 2.5rem auto;">
+                <h2 style="font-size: 2rem; margin-bottom: 0.75rem;">Por Que Reciclar o Lixo Eletrônico em Rondônia?</h2>
+                <p style="color: var(--text-secondary);">
+                    Evitar o descarte no lixo comum protege as águas da Bacia do Rio Madeira e evita a contaminação do solo amazônico com metais pesados (mercúrio, chumbo e cádmio).
+                </p>
+            </div>
+
+            <div class="info-cards-grid">
+                <div class="info-card">
+                    <div class="info-card-icon">📱</div>
+                    <h3>Smartphones & Celulares</h3>
+                    <p>Contêm baterias de íon-lítio altamente inflamáveis e metais preciosos que podem ser reinseridos na cadeia produtiva.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">💻</div>
+                    <h3>Computadores & Placas</h3>
+                    <p>Placas de circuito impresso contêm cobre e ouro. Podem ser desmontadas com segurança pela cooperativa Catanorte.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">🔋</div>
+                    <h3>Pilhas & Baterias</h3>
+                    <p>Substâncias tóxicas que contaminam lençóis freáticos. Devem ser descartadas em pontos coletores especiais como no Shopping ou na SEMA.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL DE DETALHES DO PONTO (UC04 / RF04) -->
+    <div class="modal-overlay" id="modal-details" role="dialog" aria-modal="true">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-point-title">Detalhes do Ponto de Coleta</h3>
+                <button type="button" class="modal-close" data-close-modal aria-label="Fechar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <span class="city-badge" id="modal-point-city">Porto Velho - RO</span>
+                    <span style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">✓ Ponto Real em Porto Velho</span>
+                </div>
+
+                <h4 style="font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem;">Endereço Completo:</h4>
+                <p id="modal-point-address" style="font-size: 1rem; color: var(--text-primary); margin-bottom: 1.25rem; background: var(--bg-muted); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    Endereço
+                </p>
+
+                <h4 style="font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Materiais Aceitos para Descarte (RF04):</h4>
+                <ul id="modal-point-materials" style="list-style: none; margin-bottom: 1.25rem;">
+                    <!-- Materiais inseridos via JS -->
+                </ul>
+
+                <div class="alert alert-info" style="margin-bottom: 0;">
+                    <span>💡</span>
+                    <span style="font-size: 0.85rem;">Dica: Antes de descartar aparelhos com dados pessoais (computadores ou celulares), restaure o padrão de fábrica para preservar sua privacidade.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="modal-maps-link" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                    🗺️ Ver no Google Maps
+                </a>
+                <button type="button" class="btn btn-primary btn-sm" data-close-modal>
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <span>🌿</span>
+                    <span>EcoLixo Porto Velho</span>
+                </div>
+                <p class="footer-desc">
+                    Plataforma para localização e descarte consciente de lixo eletrônico em Porto Velho - RO. Desenvolvido para a comunidade e projetos escolares de Desenvolvimento de Sistemas.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Navegação</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="pontos.html">Pesquisar Pontos</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="cadastro.html">Criar Conta</a></li>
+                    <li><a href="admin.html">Painel Administrativo</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Casos de Uso</h4>
+                <ul class="footer-links">
+                    <li><span style="font-size: 0.85rem;">UC01 — Criar Conta</span></li>
+                    <li><span style="font-size: 0.85rem;">UC02 — Fazer Login</span></li>
+                    <li><span style="font-size: 0.85rem;">UC03 — Pesquisar em Porto Velho</span></li>
+                    <li><span style="font-size: 0.85rem;">UC04 — Consultar Detalhes</span></li>
+                    <li><span style="font-size: 0.85rem;">UC05/06 — Gestão de Postos</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>&copy; 2026 EcoLixo Porto Velho • Versão 1.0</div>
+            <div>Pontos Reais: Prefeitura (SESB), CATANORTE, Porto Velho Shopping, SEMA, SEDAM, IFRO</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta - EcoLixo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22><text y=%2222%22 font-size=%2222%22>🌿</text></svg>">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-icon">🌿</span>
+                <span>EcoLixo</span>
+            </a>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">☰</button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Início</a>
+                <a href="pontos.html" class="nav-link">Pontos de Coleta</a>
+                <div class="nav-auth" id="nav-auth-container">
+                    <a href="login.html" class="btn btn-secondary btn-sm">Entrar</a>
+                    <a href="cadastro.html" class="btn btn-primary btn-sm active">Cadastre-se</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ÁREA DE CADASTRO (UC01 / RF01) -->
+    <main class="main-content auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">📝</div>
+                <h1 class="auth-title">Criar Conta no EcoLixo</h1>
+                <p class="auth-subtitle">Cadastre-se para pesquisar e consultar pontos de coleta (UC01)</p>
+            </div>
+
+            <!-- ALERTA DE ERRO -->
+            <div id="cadastro-error-alert" class="alert alert-danger" style="display: none;"></div>
+
+            <!-- FORMULÁRIO DE CADASTRO (RF01) -->
+            <form id="cadastro-form">
+                <div class="form-group">
+                    <label for="cad-nome" class="form-label">Nome Completo</label>
+                    <input type="text" id="cad-nome" class="form-control" placeholder="Ex: Mariana Ferreira" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="cad-email" class="form-label">E-mail</label>
+                    <input type="email" id="cad-email" class="form-control" placeholder="seuemail@exemplo.com" required autocomplete="email">
+                    <small class="form-text">Seu e-mail será usado como identificador único.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="cad-senha" class="form-label">Senha</label>
+                    <div class="input-password-group">
+                        <input type="password" id="cad-senha" class="form-control" placeholder="Mínimo de 6 caracteres" required minlength="6" autocomplete="new-password">
+                        <button type="button" class="toggle-password" id="btn-toggle-senha" title="Mostrar/ocultar senha">👁️</button>
+                    </div>
+                    <small class="form-text">As senhas são gravadas exclusivamente com hash seguro (RNF01).</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="cad-confirm-senha" class="form-label">Confirme a Senha</label>
+                    <input type="password" id="cad-confirm-senha" class="form-control" placeholder="Repita a senha digitada" required minlength="6" autocomplete="new-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="cad-perfil" class="form-label">Tipo de Usuário (Escopo Escolar)</label>
+                    <select id="cad-perfil" class="form-control">
+                        <option value="usuario" selected>Usuário Cadastrado (Pesquisa & Consulta)</option>
+                        <option value="admin">Administrador (Cadastrar & Atualizar Pontos)</option>
+                    </select>
+                    <small class="form-text">Opção didática para você testar ambos os perfis durante a apresentação do projeto.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="cad-termos" required checked>
+                        <span style="font-size: 0.85rem;">Concordo em praticar o descarte correto de lixo eletrônico e com os termos da plataforma.</span>
+                    </label>
+                </div>
+
+                <button type="submit" id="btn-submit-cad" class="btn btn-primary btn-block btn-lg">
+                    Finalizar Cadastro (CA01)
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Já possui uma conta? <a href="login.html" style="font-weight: 600;">Faça login aqui (UC02)</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- SCRIPTS -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('cadastro-form');
+            const nomeInput = document.getElementById('cad-nome');
+            const emailInput = document.getElementById('cad-email');
+            const senhaInput = document.getElementById('cad-senha');
+            const confirmSenhaInput = document.getElementById('cad-confirm-senha');
+            const perfilSelect = document.getElementById('cad-perfil');
+            const toggleSenhaBtn = document.getElementById('btn-toggle-senha');
+            const errorAlert = document.getElementById('cadastro-error-alert');
+            const submitBtn = document.getElementById('btn-submit-cad');
+
+            if (toggleSenhaBtn) {
+                toggleSenhaBtn.addEventListener('click', () => {
+                    const isPassword = senhaInput.type === 'password';
+                    senhaInput.type = isPassword ? 'text' : 'password';
+                    confirmSenhaInput.type = isPassword ? 'text' : 'password';
+                    toggleSenhaBtn.textContent = isPassword ? '🙈' : '👁️';
+                });
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                errorAlert.style.display = 'none';
+
+                const nome = nomeInput.value.trim();
+                const email = emailInput.value.trim();
+                const senha = senhaInput.value;
+                const confirmSenha = confirmSenhaInput.value;
+                const perfil = perfilSelect.value;
+
+                // Validações no cliente (RNF02)
+                if (nome.length < 3) {
+                    errorAlert.textContent = 'O nome deve ter no mínimo 3 caracteres.';
+                    errorAlert.style.display = 'block';
+                    return;
+                }
+
+                if (senha.length < 6) {
+                    errorAlert.textContent = 'A senha deve conter no mínimo 6 caracteres.';
+                    errorAlert.style.display = 'block';
+                    return;
+                }
+
+                if (senha !== confirmSenha) {
+                    errorAlert.textContent = 'As senhas informadas não coincidem.';
+                    errorAlert.style.display = 'block';
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<div class="loading-spinner"></div> Criando conta...';
+
+                try {
+                    const res = await window.api.register({
+                        nome,
+                        email,
+                        senha,
+                        perfil
+                    });
+
+                    // Salva sessão automática e redireciona
+                    window.auth.setUser(res.usuario, res.token);
+                    window.api.showToast('Conta criada com sucesso!', 'success');
+
+                    setTimeout(() => {
+                        if (res.usuario.perfil === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'pontos.html';
+                        }
+                    }, 500);
+
+                } catch (err) {
+                    errorAlert.textContent = err.message || 'Erro ao realizar o cadastro.';
+                    errorAlert.style.display = 'block';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
